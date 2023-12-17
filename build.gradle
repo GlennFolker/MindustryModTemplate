@@ -166,6 +166,8 @@ tasks.register('install'){
     mustRunAfter tasks.jar, tasks.dex
     doLast{
         def folder = Fi.get(OS.getAppDataDirectoryString('Mindustry')).child('mods')
+        folder.mkdirs()
+
         folder.child(tasks.jar.archiveFileName.get()).delete()
         folder.child(tasks.dex.archiveFileName.get()).delete()
 
