@@ -150,7 +150,7 @@ configure(rootProject){
 
             def sdkPlatform = file("$sdkRoot/platforms/android-$sdkVersion/android.jar")
             if(!sdkPlatform.exists()){
-                throw new GradleException("Android SDK `platforms;android-34` isn't installed")
+                throw new GradleException("Android SDK `platforms;android-$sdkVersion` isn't installed")
             }
 
             command = "$command --lib $sdkPlatform"
