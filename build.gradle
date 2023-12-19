@@ -136,28 +136,33 @@ configure(rootProject){
 
         from zipTree(desktopJar), zipTree(dexJar)
         doFirst{
+            def sdkRoot = file(
+                System.getenv('ANDROID_SDK_ROOT') ?: System.getenv('ANDROID_HOME') ?:
+                { throw new GradleException('Neither `ANDROID_SDK_ROOT` nor `ANDROID_HOME` is set') }
+            )
+
+            def d8 = file("$sdkRoot/build-tools/$androidBuildVersion/d8")
+            if(!d8.exists()){
+                throw new GradleException("Android SDK `build-tools;$androidBuildVersion` isn't installed or is corrupted")
+            }
+
             def input = desktopJar.get().asFile
-            def command = "d8 --release --min-api $sdkMinAPI --output $dexJar $input"
+            def command = "$d8 --release --min-api $androidMinVersion --output $dexJar $input"
 
             (configurations.compileClasspath.asList() + configurations.runtimeClasspath.asList()).forEach{
                 if(it.exists()) command = "$command --classpath $it"
             }
 
-            def sdkRoot = file(
-                System.getenv('ANDROID_SDK_ROOT') ?: System.getenv('ANDROID_HOME') ?:
-                { throw new GradleException('Neither `ANDROID_SDK_ROOT` nor `ANDROID_HOME` is set.') }
-            )
-
-            def sdkPlatform = file("$sdkRoot/platforms/android-$sdkVersion/android.jar")
-            if(!sdkPlatform.exists()){
-                throw new GradleException("Android SDK `platforms;android-34` isn't installed")
+            def androidJar = file("$sdkRoot/platforms/android-$androidSdkVersion/android.jar")
+            if(!androidJar.exists()){
+                throw new GradleException("Android SDK `platforms;android-$androidSdkVersion` isn't installed or is corrupted")
             }
 
-            command = "$command --lib $sdkPlatform"
+            command = "$command --lib $androidJar"
             if(OS.isWindows) command = "cmd /c $command"
 
             logger.log(LogLevel.LIFECYCLE, 'Running `d8`.')
-            command.execute(null, layout.buildDirectory.dir('libs').get().asFile).waitForProcessOutput(System.out, System.err)
+            command.execute(null, layout.projectDirectory.asFile).waitForProcessOutput(System.out, System.err)
         }
     }
 }
