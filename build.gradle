@@ -106,23 +106,33 @@ configure(rootProject){
     jar{
         archiveFileName = "${modArtifact}Desktop.jar"
 
+        // Deliberately check if the mod meta is actually written in HJSON, since, well, some people actually use it.
+        // But this is also not mentioned in the `README.md`, for the mischievous reason of driving beginners into using
+        // JSON instead.
+        def metaJson = layout.projectDirectory.file('mod.json')
+        def metaHjson = layout.projectDirectory.file('mod.hjson')
+        if(metaJson.asFile.exists() && metaHjson.asFile.exists()){
+            throw new GradleException('Ambiguous mod meta: both `mod.json` and `mod.hjson` exist.')
+        }else if(!metaJson.asFile.exists() && !metaHjson.asFile.exists()){
+            throw new GradleException('Missing mod meta: neither `mod.json` nor `mod.hjson` exist.')
+        }
+        def isJson = metaJson.asFile.exists()
+
         from files(sourceSets.main.output.classesDirs)
         from files(sourceSets.main.output.resourcesDir)
         from configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it)}
 
         from files(layout.projectDirectory.dir('assets'))
-        from(layout.projectDirectory){
-            include 'mod.json'
-            include 'icon.png'
-        }
+        from layout.projectDirectory.file('icon.png')
+        from isJson ? metaJson : metaHjson
 
         doFirst{
             def name = Pattern
-                .compile('"name": "(.*)"')
-                .matcher(layout.projectDirectory.file('mod.json').asFile.text)
+                .compile("${isJson ? '"name"' : 'name'}: \"(.*)\"")
+                .matcher((isJson ? metaJson : metaHjson).asFile.text)
 
             if(name.find() && name.group(1) != modName){
-                logger.log(LogLevel.WARN, "Mod name mismatch: '${name.group(1)}' (mod.json) != '$modName' (gradle.properties)")
+                throw new GradleException("Mod name mismatch: '${name.group(1)}' (mod.${isJson ? 'json' : 'hjson'}) != '$modName' (gradle.properties).")
             }
         }
     }

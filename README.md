@@ -172,5 +172,5 @@ though, so be communicative!
 > The mod metadata file may be `mod.json` or `mod.hjson`, **but not both**. In case
 > of a duplicate like that, you should get an error like this when compiling:
 > ```
-> Ambiguous mod meta: both `mod.json` and `mod.hjson` exists.
+> Ambiguous mod meta: both `mod.json` and `mod.hjson` exist.
 > ```
