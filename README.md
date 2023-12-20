@@ -196,4 +196,4 @@ though, so be communicative!
    assets-->bundles & maps & music & shaders & sounds & sprites;
    ```
    That's all! You can start hacking your way into modding now. Refer to the
-   [**Building**](#usage) section on how to build the JARs.
+   [**Building**](#using) section on how to build the JARs.
