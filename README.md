@@ -56,13 +56,13 @@ though, so be communicative!
    classDef file fill:#468868,stroke:#bdffdf;
 
    root{{"/"}};
-   github{{".github"}};
+   github{{".github/"}};
    workflows{{"workflows/"}};
    assets{{"assets/"}};
    gradle{{"gradle/"}};
    wrapper{{"wrapper/"}};
    src{{"src/"}};
-   confictura{{"confictura"}};
+   confictura{{"confictura/"}};
    class root,github,workflows,assets,gradle,wrapper,src,confictura folder;
 
    ci(["ci.yml"]);
@@ -174,3 +174,26 @@ though, so be communicative!
 > ```
 > Ambiguous mod meta: both `mod.json` and `mod.hjson` exist.
 > ```
+
+5. Put your asset files (textures, sounds, music, other binary objects you can load
+   from `Vars.tree`) inside `assets/`. The contents of this folder should look
+   similar to those of JSON and JS mods.
+   ```mermaid
+   graph TD;
+   %%{init:{'flowchart':{'nodeSpacing': 10}}}%%;
+   
+   classDef folder fill:#465768,stroke:#bdcedf;
+
+   assets{{"assets/"}};
+   bundles{{"bundles/"}};
+   maps{{"maps/"}};
+   music{{"music/"}};
+   shaders{{"shaders/"}};
+   sounds{{"sounds/"}};
+   sprites{{"sprites/"}};
+   class assets,bundles,maps,music,shaders,sounds,sprites folder;
+
+   assets-->bundles & maps & music & shaders & sounds & sprites;
+   ```
+   That's all! You can start hacking your way into modding now. Refer to the
+   [**Building**](#usage) section on how to build the JARs.
