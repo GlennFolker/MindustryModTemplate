@@ -168,13 +168,6 @@ though, so be communicative!
 > Mod name mismatch: 'hello' (mod.json) != 'world' (gradle.properties).
 > ```
 
-> [!TIP]
-> The mod metadata file may be `mod.json` or `mod.hjson`, **but not both**. In case
-> of a duplicate like that, you should get an error like this when compiling:
-> ```
-> Ambiguous mod meta: both `mod.json` and `mod.hjson` exist.
-> ```
-
 5. Put your asset files (textures, sounds, music, other binary objects you can load
    from `Vars.tree`) inside `assets/`. The contents of this folder should look
    similar to those of JSON and JS mods.
