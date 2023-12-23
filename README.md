@@ -1,47 +1,25 @@
 # `MindustryModTemplate`
 
-[Mindustry](https://github.com/Anuken/Mindustry) Java mod template, complete with
-[`EntityAnno`](https://github.com/GlennFolker/EntityAnno) and syntax downgrader
-integration, works for both Android and PC.
+[Mindustry](https://github.com/Anuken/Mindustry) Java mod template, otherwise known as JAR-modding, complete with [`EntityAnno`](https://github.com/GlennFolker/EntityAnno) and syntax downgrader integration, works for both Android and PC.
 
 ## Using
 
-Before going into using this template, be aware that a fair amount of Java knowledge
-and Git *(GitHub Desktop is fine, but `git` CLI is a million times better)* is
-**highly beneficial**. Going in blind isn't impossible, but you'll face a lot of
-problems. Not that people on [the Discord](https://discord.gg/mindustry) won't help,
-though, so be communicative!
+Before going into using this template, be aware that a fair amount of Java knowledge and Git *(GitHub Desktop is fine, but `git` CLI is a million times better)* is **highly beneficial**. Going in blind isn't impossible, but you'll face a lot of problems. Not that people on [the Discord](https://discord.gg/mindustry) won't help, though, so be communicative!
 
-1. Install JDK 17 or higher. Plain or terminal-based code editors are **completely
-   *not* recommended!** Use an IDE like [IntelliJ IDEA](
-   https://www.jetbrains.com/idea/download/); there are free Community Edition
-   releases available, just scroll down a bit.
-3. Click the `Use this template` button and create your repository.
-4. Clone a local copy of the repository.
+1. Install JDK 17 or higher. Plain or terminal-based code editors are **completely *not* recommended!** Use an IDE like [IntelliJ IDEA](https://www.jetbrains.com/idea/download/); there are free Community Edition releases available, just scroll down a bit.
+2. Click the `Use this template` button and create your repository.
+3. Clone a local copy of the repository.
 
 > [!IMPORTANT]
-> A **local copy** is *not* a mere ZIP archive you obtain by downloading. This is
-> where the Git knowledge comes to play. If you have GitHub CLI or GitHub Desktop
-> installed, the site should provide instructions on how to use either, under the
-> `<> Code` menu.
+> A **local copy** is *not* a mere ZIP archive you obtain by downloading. This is where the Git knowledge comes to play. If you have GitHub CLI or GitHub Desktop installed, the site should provide instructions on how to use either, under the `<> Code` menu.
 >
 > `Download ZIP` is **not** a proper way to clone your repository.
 
-4. Refactor namings to your preferences. The template is designed in such a way
-   that this step should only require you to modify:
-   - `gradle.properties`, the "Project configurations" section. For the "package"
-     properties, if you don't know what you're doing, simply just change `template`
-     to your preferred mod root package naming *(e.g. `mymod`, or `confictura` if
-     your mod name is "confictura")*.
+4. Refactor namings to your preferences. The template is designed in such a way that this step should only require you to modify:
+   - `gradle.properties`, the "Project configurations" section. For the "package" properties, if you don't know what you're doing, simply just change `template` to your preferred mod root package naming *(e.g. `mymod`, or `confictura` if your mod name is "confictura")*.
    - `mod.json`, which is the entire metadata of your mod.
-   - `src/` folder and its contents, which is where your Java source files are
-     stored. Rename folders, package, and class names as you prefer. Note that
-     the main mod class' full name *(package + class)* must correspond to the
-     `main` property in `mod.json`.
-   - `.github/workflows/ci.yml`, which is the automated Continuous Integration
-     that runs on your GitHub repository everytime you push a commit. This
-     automates cross-platform builds which you might find useful. You should
-     only edit the last 2 lines about `name` and `path`.
+   - `src/` folder and its contents, which is where your Java source files are stored. Rename folders, package, and class names as you prefer. Note that the main mod class' full name *(package + class)* must correspond to the `main` property in `mod.json`.
+   - `.github/workflows/ci.yml`, which is the automated Continuous Integration that runs on your GitHub repository everytime you push a commit. This automates cross-platform builds which you might find useful. You should only edit the last 2 lines about `name` and `path`.
 
    Here's an example of a properly configured mod base from the template, assuming
    "confictura" as the name:
@@ -87,8 +65,7 @@ though, so be communicative!
    root-->ignore & readme & build & prop & wrapper-unix & wrapper-windows & icon & meta & settings;
    ```
 
-   Here are the changes made to files highlighted above; red denotes removals, green
-   denotes additions:
+   Here are the changes made to files highlighted above; red denotes removals, green denotes additions:
    `./github/workflows/ci.yml`:
    ```diff
    ...
@@ -158,19 +135,14 @@ though, so be communicative!
    ```
 
 > [!NOTE]
-> The project Gradle scripts check the correspondence of the `modName` property in
-> `gradle.properties` and the `name` property in `mod.json`. These *must* be the
-> same, but doesn't deliberately edit it out for you since potential loss of
-> progress can be really annoying.
+> The project Gradle scripts check the correspondence of the `modName` property in `gradle.properties` and the `name` property in `mod.json`. These *must* be the same, but doesn't deliberately edit it out for you since potential loss of progress can be really annoying.
 >
 > In the case of a discrepancy, you should get an error like this when compiling:
 > ```
 > Mod name mismatch: 'hello' (mod.json) != 'world' (gradle.properties).
 > ```
 
-5. Put your asset files (textures, sounds, music, other binary objects you can load
-   from `Vars.tree`) inside `assets/`. The contents of this folder should look
-   similar to those of JSON and JS mods.
+5. Put your asset files *(textures, sounds, music, etc.)* inside `assets/`. The contents of this folder are included in the built JARs, and should look similar to those of JSON and JS mods.
    ```mermaid
    graph TD;
    %%{init:{'flowchart':{'nodeSpacing': 10}}}%%;
@@ -188,5 +160,33 @@ though, so be communicative!
 
    assets-->bundles & maps & music & shaders & sounds & sprites;
    ```
-   That's all! You can start hacking your way into modding now. Refer to the
-   [**Building**](#using) section on how to build the JARs.
+   That's all! You can start hacking your way into modding now. Refer to the [**Building**](#building) section on how to build the JARs.
+
+## Building
+
+Mindustry Java mods are cross-platform, supporting PC (Windows, Mac, Linux) and Android. This section describes how to build the JARs for both PC and Android. Building these JARs are done through the usage of terminals: `cmd.exe` in Windows, Terminal in Mac, and if you're either on Linux or using a terminal emulator on Android such as Termux, you should already know what you're doing anyway. Following these steps should require basic terminal functionality such as `cd`.
+
+### Desktop Build
+
+Desktop builds are convenient for testing, but will obviously **not** work on Android, so never include this in your releases. Desktop JARs have `Desktop` suffixed to their name, e.g. `ModTemplateDesktop.jar`. Here's how you can build the mod:
+1. Open your terminal, and `cd` to your local copy of the mod.
+2. Ensure your internet connection on first or clean builds, as the project will try to fetch prerequisites from the internet.
+3. Run `gradlew jar` *(replace `gradlew` with `./gradlew` on Mac/Linux)*. This should create a JAR inside `build/libs/` that you can copy over to the Mindustry mods folder to install it.
+4. You can also then run `gradlew install` to automatically install the mod JAR, or even `gradlew jar install` to do both compiling and installing at once.
+
+### Android Build
+
+Android builds are automated on the CI hosted by GitHub Actions, so you should be able to just push a commit and wait for the CI to provide your build. If you still want to build locally, though, follow these steps.
+
+#### Installing Android SDK
+1. Install [Android SDK](https://developer.android.com/studio#command-line-tools-only), specifically the "**Command line tools only**" section. Download the tools that match your platform.
+2. Unzip the Android SDK command line tools inside a folder; let's call it `AndroidSDK/` for now.
+3. Inside this folder is a folder named `cmdline-tools/`. Put everything inside `cmdline-tools/` to a new folder named `latest/`, so that the folder structure looks like `AndroidSDK/cmdline-tools/latest/`.
+4. Open your terminal, `cd` to the `latest/` folder.
+5. Run `sdkmanager --install "platforms;android-34" "build-tools;34.0.0"`. These versions correspond to the `androidSdkVersion` and `androidBuildVersion` properties inside `gradle.properties`, which default to `34` and `34.0.0`, respectively.
+6. Set environment variable `ANDROID_SDK_ROOT` as the full path to the `AndroidSDK/` folder you created, and restart your terminal to update the environments.
+
+#### Building
+1. Open your terminal, and `cd` to your local copy of the mod.
+2. Run `gradlew dex`. This should create a cross-platform JAR inside `build/libs/` that isn't suffixed with `Desktop` that you can copy over to the Mindustry mods folder to install it.
+3. You can also then run `gradlew install` to automatically install the mod JAR, or even `gradlew dex install` to do both compiling and installing at once.
