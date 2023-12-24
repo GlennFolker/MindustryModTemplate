@@ -190,3 +190,11 @@ Android builds are automated on the CI hosted by GitHub Actions, so you should b
 1. Open your terminal, and `cd` to your local copy of the mod.
 2. Run `gradlew dex`. This should create a cross-platform JAR inside `build/libs/` that isn't suffixed with `Desktop` that you can copy over to the Mindustry mods folder to install it.
 3. You can also then run `gradlew install` to automatically install the mod JAR, or even `gradlew dex install` to do both compiling and installing at once.
+
+## Adding Dependencies
+
+**Never** use `implementation` for Mindustry/Arc groups and their submodules. There's a reason they're `compileOnly`; they're only present in compilation and excluded from the final JARs, as on runtime they're resolved from the game instance itself. Other JAR-mod dependencies must also use `compileOnly`. Only ever use `implementation` for external Java libraries that must be bundled with your mod.
+
+## License
+
+The project is licensed under [GNU GPL v3](/LICENSE).
