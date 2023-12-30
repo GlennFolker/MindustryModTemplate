@@ -138,8 +138,6 @@ configure(rootProject){
             if(name.find() && name.group(1) != modName){
                 throw new GradleException("Mod name mismatch: '${name.group(1)}' (mod.${isJson ? 'json' : 'hjson'}) != '$modName' (gradle.properties).")
             }
-
-            delete tasks.dex.archiveFile
         }
     }
 
@@ -186,33 +184,25 @@ configure(rootProject){
             logger.log(LogLevel.LIFECYCLE, 'Running `d8`.')
             command.execute(null, layout.projectDirectory.asFile).waitForProcessOutput(System.out, System.err)
         }
-
-        doLast{
-            delete tasks.jar.archiveFile
-        }
     }
 }
 
-tasks.register('install'){
-    mustRunAfter tasks.jar, tasks.dex
-    doLast{
-        def folder = Fi.get(OS.getAppDataDirectoryString('Mindustry')).child('mods')
-        folder.mkdirs()
+for(def i = 0; i < 2; i++){
+    final def isDex = i == 1
+    final def name = isDex ? 'installDex' : 'install'
+    final def input = isDex ? tasks.dex : tasks.jar
 
-        folder.child(tasks.jar.archiveFileName.get()).delete()
-        folder.child(tasks.dex.archiveFileName.get()).delete()
+    tasks.register(name){
+        inputs.files input
+        doLast{
+            def folder = Fi.get(OS.getAppDataDirectoryString('Mindustry')).child('mods')
+            folder.mkdirs()
 
-        def jarOutput = new Fi(tasks.jar.archiveFile.get().asFile)
-        def dexOutput = new Fi(tasks.dex.archiveFile.get().asFile)
+            folder.child(tasks.jar.archiveFileName.get()).delete()
+            folder.child(tasks.dex.archiveFileName.get()).delete()
 
-        if(!jarOutput.exists() && !dexOutput.exists()){
-            logger.log(LogLevel.ERROR, 'Neither :jar nor :dex artifacts are found; run one of these tasks first.')
-        }else if(dexOutput.exists()){
-            dexOutput.copyTo(folder)
-            logger.log(LogLevel.LIFECYCLE, "Copied :dex output to $folder.")
-        }else{
-            jarOutput.copyTo(folder)
-            logger.log(LogLevel.LIFECYCLE, "Copied :jar output to $folder.")
+            new Fi(input.archiveFile.get().asFile).copyTo(folder)
+            logger.log(LogLevel.LIFECYCLE, "Copied :${isDex ? 'dex' : 'jar'} output to $folder.")
         }
     }
 }
