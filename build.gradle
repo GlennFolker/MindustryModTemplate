@@ -126,6 +126,10 @@ configure(rootProject){
         from layout.projectDirectory.file('icon.png')
         from isJson ? metaJson : metaHjson
 
+        metaInf{
+            from layout.projectDirectory.file('LICENSE')
+        }
+
         doFirst{
             def name = Pattern
                 .compile("${isJson ? '"name"' : 'name'}: \"(.*)\"")
@@ -134,6 +138,8 @@ configure(rootProject){
             if(name.find() && name.group(1) != modName){
                 throw new GradleException("Mod name mismatch: '${name.group(1)}' (mod.${isJson ? 'json' : 'hjson'}) != '$modName' (gradle.properties).")
             }
+
+            delete tasks.dex.archiveFile
         }
     }
 
@@ -179,6 +185,10 @@ configure(rootProject){
             // Run `d8`.
             logger.log(LogLevel.LIFECYCLE, 'Running `d8`.')
             command.execute(null, layout.projectDirectory.asFile).waitForProcessOutput(System.out, System.err)
+        }
+
+        doLast{
+            delete tasks.jar.archiveFile
         }
     }
 }
