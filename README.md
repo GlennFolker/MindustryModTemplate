@@ -189,7 +189,7 @@ Android builds are automated on the CI hosted by GitHub Actions, so you should b
 #### Building
 1. Open your terminal, and `cd` to your local copy of the mod.
 2. Run `gradlew dex`. This should create a cross-platform JAR inside `build/libs/` that isn't suffixed with `Desktop` that you can copy over to the Mindustry mods folder to install it.
-3. You can also then run `gradlew install` to automatically install the mod JAR, or even `gradlew dex install` to do both compiling and installing at once.
+3. You can also then run `gradlew installDex` to automatically install the mod JAR, or even `gradlew dex installDex` to do both compiling and installing at once.
 
 ## Adding Dependencies
 
