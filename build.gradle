@@ -1,5 +1,6 @@
 import arc.files.*
 import arc.util.*
+import arc.util.serialization.Jval
 
 import java.util.regex.*
 
@@ -106,38 +107,36 @@ configure(rootProject){
     jar{
         archiveFileName = "${modArtifact}Desktop.jar"
 
-        // Deliberately check if the mod meta is actually written in HJSON, since, well, some people actually use it.
-        // But this is also not mentioned in the `README.md`, for the mischievous reason of driving beginners into using
-        // JSON instead.
-        def metaJson = layout.projectDirectory.file('mod.json')
-        def metaHjson = layout.projectDirectory.file('mod.hjson')
-        if(metaJson.asFile.exists() && metaHjson.asFile.exists()){
-            throw new GradleException('Ambiguous mod meta: both `mod.json` and `mod.hjson` exist.')
-        }else if(!metaJson.asFile.exists() && !metaHjson.asFile.exists()){
-            throw new GradleException('Missing mod meta: neither `mod.json` nor `mod.hjson` exist.')
-        }
-        def isJson = metaJson.asFile.exists()
-
         from files(sourceSets.main.output.classesDirs)
         from files(sourceSets.main.output.resourcesDir)
         from configurations.runtimeClasspath.collect{it.isDirectory() ? it : zipTree(it)}
 
         from files(layout.projectDirectory.dir('assets'))
         from layout.projectDirectory.file('icon.png')
-        from isJson ? metaJson : metaHjson
+
+        def meta = file("$temporaryDir/mod.json")
+        from meta
 
         metaInf{
             from layout.projectDirectory.file('LICENSE')
         }
 
         doFirst{
-            def name = Pattern
-                .compile("${isJson ? '"name"' : 'name'}: \"(.*)\"")
-                .matcher((isJson ? metaJson : metaHjson).asFile.text)
-
-            if(name.find() && name.group(1) != modName){
-                throw new GradleException("Mod name mismatch: '${name.group(1)}' (mod.${isJson ? 'json' : 'hjson'}) != '$modName' (gradle.properties).")
+            // Deliberately check if the mod meta is actually written in HJSON, since, well, some people actually use it.
+            // But this is also not mentioned in the `README.md`, for the mischievous reason of driving beginners into using
+            // JSON instead.
+            def metaJson = layout.projectDirectory.file('mod.json')
+            def metaHjson = layout.projectDirectory.file('mod.hjson')
+            if(metaJson.asFile.exists() && metaHjson.asFile.exists()){
+                throw new GradleException('Ambiguous mod meta: both `mod.json` and `mod.hjson` exist.')
+            }else if(!metaJson.asFile.exists() && !metaHjson.asFile.exists()){
+                throw new GradleException('Missing mod meta: neither `mod.json` nor `mod.hjson` exist.')
             }
+            def isJson = metaJson.asFile.exists()
+
+            def map = (isJson ? metaJson : metaHjson).asFile.withReader{Jval.read(it)}
+            map.put('name', modName)
+            meta.withWriter{map.writeTo(it, Jval.Jformat.formatted)}
         }
     }
 

@@ -21,6 +21,9 @@ Before going into using this template, be aware that a fair amount of Java knowl
    - `src/` folder and its contents, which is where your Java source files are stored. Rename folders, package, and class names as you prefer. Note that the main mod class' full name *(package + class)* must correspond to the `main` property in `mod.json`.
    - `.github/workflows/ci.yml`, which is the automated Continuous Integration that runs on your GitHub repository everytime you push a commit. This automates cross-platform builds which you might find useful. You should only edit the last 2 lines about `name` and `path`.
 
+> [!TIP]
+> There's no `name` property in this template's `mod.json`. That property is automatically filled up when building.
+
    Here's an example of a properly configured mod base from the template, assuming
    "confictura" as the name:
    ```mermaid
@@ -119,7 +122,6 @@ Before going into using this template, be aware that a fair amount of Java knowl
    `mod.json`:
    ```diff
      {
-   -     "name": "mod-template",
    +     "name": "confictura",
    -     "displayName": "Mod Template",
    +     "displayName": "Confictura",
@@ -133,14 +135,6 @@ Before going into using this template, be aware that a fair amount of Java knowl
    +     "main": "confictura.ConficturaMod"
      }
    ```
-
-> [!NOTE]
-> The project Gradle scripts check the correspondence of the `modName` property in `gradle.properties` and the `name` property in `mod.json`. These *must* be the same, but doesn't deliberately edit it out for you since potential loss of progress can be really annoying.
->
-> In the case of a discrepancy, you should get an error like this when compiling:
-> ```
-> Mod name mismatch: 'hello' (mod.json) != 'world' (gradle.properties).
-> ```
 
 5. Put your asset files *(textures, sounds, music, etc.)* inside `assets/`. The contents of this folder are included in the built JARs, and should look similar to those of JSON and JS mods.
    ```mermaid
