@@ -122,7 +122,6 @@ Before going into using this template, be aware that a fair amount of Java knowl
    `mod.json`:
    ```diff
      {
-   +     "name": "confictura",
    -     "displayName": "Mod Template",
    +     "displayName": "Confictura",
    -     "description": "Mindustry Java mod template, complete with EntityAnno and syntax downgrader integration.",
