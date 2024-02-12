@@ -72,7 +72,7 @@ Before going into using this template, be aware that a fair amount of Java knowl
    `./github/workflows/ci.yml`:
    ```diff
    ...
-          uses: actions/upload-artifact@v3
+          uses: actions/upload-artifact@v4
           with:
    -        name: ModTemplate (zipped)
    +        name: Confictura (zipped)
