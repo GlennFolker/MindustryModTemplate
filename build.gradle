@@ -32,11 +32,11 @@ configure(allprojects){
         useJitpack = Boolean.valueOf(mindustryBE)
 
         arc = {String module ->
-            return "com.github.Anuken.Arc$module:$arcVersion"
+            "com.github.Anuken.Arc$module:$arcVersion"
         }
 
         mindustry = {String module ->
-            return "com.github.Anuken.Mindustry$module:$mindustryVersion"
+            "com.github.Anuken.Mindustry$module:$mindustryVersion"
         }
     }
 
