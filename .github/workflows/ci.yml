@@ -12,6 +12,8 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
       - name: Build mod artifact
         run: |
           chmod +x gradlew
