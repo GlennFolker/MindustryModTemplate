@@ -24,8 +24,8 @@ Before going into using this template, be aware that a fair amount of Java knowl
 > [!TIP]
 > There's no `name` property in this template's `mod.json`. That property is automatically filled up when building.
 
-   Here's an example of a properly configured mod base from the template, assuming
-   "confictura" as the name:
+   Here's an example of a properly configured mod base from the template, *assuming
+   "confictura" as the name*:
    ```mermaid
    ---
    title: Project Hierarchy
@@ -52,13 +52,13 @@ Before going into using this template, be aware that a fair amount of Java knowl
    main(["ConficturaMod.java"]);
    ignore([".gitignore"]);
    readme(["README.md"]);
-   build(["build.gradle"]);
+   build(["build.gradle.kts"]);
    prop(["gradle.properties"]);
    wrapper-unix(["gradlew"]);
    wrapper-windows(["gradlew.bat"]);
    icon(["icon.png"]);
    meta(["mod.json"]);
-   settings(["settings.gradle"]);
+   settings(["settings.gradle.kts"]);
    class ci,main,prop,meta file;
 
    root-->github-->workflows-->ci;
@@ -182,7 +182,7 @@ Android builds are automated on the CI hosted by GitHub Actions, so you should b
 #### Building
 1. Open your terminal, and `cd` to your local copy of the mod.
 2. Run `gradlew dex`. This should create a cross-platform JAR inside `build/libs/` that isn't suffixed with `Desktop` that you can copy over to the Mindustry mods folder to install it.
-3. You can also then run `gradlew installDex` to automatically install the mod JAR, or even `gradlew dex installDex` to do both compiling and installing at once.
+3. You can then copy the resulting artifact to your phone's Mindustry mods folder in its data directory.
 
 ## Adding Dependencies
 
