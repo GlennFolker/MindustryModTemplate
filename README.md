@@ -176,7 +176,7 @@ Android builds are automated on the CI hosted by GitHub Actions, so you should b
 2. Unzip the Android SDK command line tools inside a folder; let's call it `AndroidSDK/` for now.
 3. Inside this folder is a folder named `cmdline-tools/`. Put everything inside `cmdline-tools/` to a new folder named `latest/`, so that the folder structure looks like `AndroidSDK/cmdline-tools/latest/`.
 4. Open your terminal, `cd` to the `latest/` folder.
-5. Run `sdkmanager --install "platforms;android-34" "build-tools;34.0.0"`. These versions correspond to the `androidSdkVersion` and `androidBuildVersion` properties inside `gradle.properties`, which default to `34` and `34.0.0`, respectively.
+5. Run `sdkmanager --install "platforms;android-35" "build-tools;35.0.0"`. These versions correspond to the `androidSdkVersion` and `androidBuildVersion` properties inside `gradle.properties`, which default to `35` and `35.0.0`, respectively.
 6. Set environment variable `ANDROID_SDK_ROOT` as the full path to the `AndroidSDK/` folder you created, and restart your terminal to update the environments.
 
 #### Building
